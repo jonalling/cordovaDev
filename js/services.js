@@ -16,6 +16,8 @@ angular.module('starter.services', [])
   //   rssi: '-71'
   // }];
 
+  //////  NOT USING... YET
+
   $ionicPlatform.ready(function(){
 
     var scan = $cordovaBLE.scan([],5);
@@ -26,12 +28,9 @@ angular.module('starter.services', [])
       },
       function(result) {
         // var devices = JSON.stringify(result);
-
-        // return devices;
+        return result;
 
     });
-
-    return devices;
 
   }); // end $ionicPlatform.ready
 

@@ -79,6 +79,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
         }
       }
     });
+
+    //////  LEGACY FROM IONIC STARTER APP
+
     // .state('tab.chat-detail', {
     //   url: '/chats/:chatId',
     //   views: {

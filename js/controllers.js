@@ -4,31 +4,7 @@ angular.module('starter.controllers', [])
 
   $ionicPlatform.ready(function(){
 
-    ////// THIS WORKS  -- BUT DOESN'T CONTINUOUSLY UPDATE, JUST ON TAB PRESS
-
-    // function onSuccess(acceleration) {
-    //   $scope.X = acceleration.x;
-    //   $scope.Y = acceleration.y;
-    //   $scope.Z = acceleration.z;
-    //   $scope.timeStamp = acceleration.timestamp;
-    // };
-    // function onError() {
-    //   alert("Acceleration Error!")
-    // };
-    // var options = {frequency: 40};
-    //
-    // var accel = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
-
     ////// FROM ngCORDOVA EXAMPLE
-
-    // $cordovaDeviceMotion.getCurrentAcceleration().then(function(result) {
-    //   $scope.X = result.x;
-    //   $scope.Y = result.y;
-    //   $scope.Z = result.z;
-    //   $scope.timeStamp = result.timestamp;
-    // }, function(err) {
-    //   // An error occurred. Show a message to the user
-    // });
 
     var options = { frequency : 100 };
     var watch = $cordovaDeviceMotion.watchAcceleration(options);
@@ -120,6 +96,8 @@ angular.module('starter.controllers', [])
   }); // end $ionicPlatform.ready
 
 }) // end bleCtrl
+
+////// LEGACY FROM IONIC STARTER APP
 
 // .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 //   $scope.chat = Chats.get($stateParams.chatId);
