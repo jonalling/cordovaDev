@@ -1,0 +1,12 @@
+<ion-view view-title="ngCordova Development App">
+  <ion-content>
+    <button class="button button-stable button-block" ng-click="scanDevices()">Refresh List</button>
+    <ion-list>
+        <ion-item ng-repeat="device in devices" type="item-text-wrap" href="#/devices/{{device.name}}">
+          <h2>Name: {{device.name}}</h2>
+          <p>ID: {{device.id}}</p>
+          <p>RSSI: {{device.rssi}}</p>
+        </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

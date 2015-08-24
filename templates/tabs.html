@@ -1,0 +1,29 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-color-active-positive">
+
+  <!-- Motion Tab -->
+  <ion-tab title="Motion" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/tab/motion">
+    <ion-nav-view name="tab-motion"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Orientation Tab -->
+  <ion-tab title="Orientation" icon-off="ion-ios-navigate-outline" icon-on="ion-ios-navigate" href="#/tab/orient">
+    <ion-nav-view name="tab-orient"></ion-nav-view>
+  </ion-tab>
+
+  <!-- GeoLocation Tab -->
+  <ion-tab title="GeoLocation" icon-off="ion-ios-location-outline" icon-on="ion-ios-location" href="#/tab/geo">
+    <ion-nav-view name="tab-geo"></ion-nav-view>
+  </ion-tab>
+
+  <!-- BLE Devices Tab -->
+  <ion-tab title="devices" icon-off="ion-bluetooth" icon-on="ion-bluetooth" href="#/tab/devices">
+    <ion-nav-view name="tab-devices"></ion-nav-view>
+  </ion-tab>
+
+
+</ion-tabs>
