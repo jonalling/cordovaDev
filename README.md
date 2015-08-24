@@ -6,4 +6,4 @@ An Ionic development app based on the tabs starter that interfaces with several 
 - [Geolocation](http://ngcordova.com/docs/plugins/geolocation/)
 - [BLE (undocumented)](https://github.com/driftyco/ng-cordova/blob/master/src/plugins/ble.js) //still in development
 
-This repo is not a complete app, you first need to start a new ionic app with the tabs starter, then copy over the default files with these.
+This repo is not a complete app, you first need to start a new ionic app with the tabs starter.
