@@ -20,6 +20,7 @@ angular.module('starter.services', [])
 
   $ionicPlatform.ready(function(){
 
+    var devices = [];
     var scan = $cordovaBLE.scan([],5);
     scan.then(
       null,
@@ -27,11 +28,15 @@ angular.module('starter.services', [])
         // error
       },
       function(result) {
-        // var devices = JSON.stringify(result);
-        return result;
-
+        devices.push(result);
+        // $scope.devices = devices;
+        // return devices;
     });
 
+    // return devices;
+
   }); // end $ionicPlatform.ready
+
+  return devices;
 
 }); // end 'Devices'

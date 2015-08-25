@@ -80,17 +80,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       }
     });
 
-    //////  LEGACY FROM IONIC STARTER APP
-
-    // .state('tab.chat-detail', {
-    //   url: '/chats/:chatId',
-    //   views: {
-    //     'tab-chats': {
-    //       templateUrl: 'templates/chat-detail.html',
-    //       controller: 'ChatDetailCtrl'
-    //     }
-    //   }
-    // });
+    .state('tab.devices-detail', {
+      url: '/devices/:deviceId',
+      views: {
+        'tab-devices': {
+          templateUrl: 'templates/devices-detail.html',
+          controller: 'bleConnectCtrl'
+        }
+      }
+    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/motion');

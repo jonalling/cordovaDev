@@ -80,25 +80,39 @@ angular.module('starter.controllers', [])
 
 .controller('bleCtrl', function($scope, $ionicPlatform, $cordovaBLE) {
 
-  $ionicPlatform.ready(function(){
+  var devices = [];
 
-    var scan = $cordovaBLE.scan([],5);
-    scan.then(
-      null,
-      function(err) {
-        // error
-      },
-      function(result) {
-        conosole.log(JSON.stringify(result));
-        $scope.devices = result;
-    });
+  function refreshDevices(){
 
-  }); // end $ionicPlatform.ready
+    devices.length = 0;
+    // var devices = [];
+
+    $ionicPlatform.ready(function(){
+
+      var scan = $cordovaBLE.scan([],5);
+      scan.then(
+        null,
+        function(err) {
+          // error
+        },
+        function(result) {
+          devices.push(result);
+          ////// TODO: eventually eliminate duplicate items, update array contents instead of clear and push
+          $scope.devices = devices;
+      });
+
+    }); // end $ionicPlatform.ready
+
+  }; // end refreshDevices function
+
+  (function scanDevices() {
+    refreshDevices();
+  })();
+
+  $scope.refreshDevices = refreshDevices;
 
 }) // end bleCtrl
 
-////// LEGACY FROM IONIC STARTER APP
-
-// .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-//   $scope.chat = Chats.get($stateParams.chatId);
-// });
+.controller('bleConnectCtrl', function($scope, $stateParams, Chats) {
+  $scope.chat = Chats.get($stateParams.chatId);
+});
