@@ -206,6 +206,7 @@ angular.module('starter.services', [])
       var notify = $cordovaBLE.startNotification(deviceId, serviceUUID, characteristicUUID);
       notify.then(
         function(result) {
+          // trying promises
           var deferred = $q.defer();
           var value = new Uint8Array(result);
           deferred.resolve(value);
