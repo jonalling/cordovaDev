@@ -1,14 +1,21 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
-<ion-view view-title="{{chat.name}}">
+<ion-view view-title="ngCordova Development App">
   <ion-content class="padding">
-    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{chat.lastText}}
-    </p>
+    <h2>Name: {{device.name}}</h2>
+    <div ng-if="shouldShowConnected()">
+      <p>ID: {{device.id}}</p>
+      <p>RSSI: {{device.rssi}}</p>
+      <p>Is Connectable: {{device.advertising.kCBAdvDataIsConnectable}}</p>
+    </div>
+    <button ng-if="shouldShowConnected()" class="button button-full button-positive" ng-click="connectDevice()">Connect</button>
+    <button ng-if="shouldShowSelecting()" class="button button-full button-assertive" ng-click="disconnectDevice()">Disconnect</button>
+    <p ng-if="shouldShowSelecting()">Service to read:</p>
+    <ion-list>
+      <ion-item ng-if="shouldShowSelecting()" ng-repeat="data in deviceData" type="item-text-wrap" ng-click="notifyMe(data)">
+        <h2>Service UUID: {{data.service}}</h2>
+        <h2>Characteristic UUID: {{data.characteristic}}</h2>
+      </ion-item>
+    </ion-list>
+    <h2 ng-if="shouldShowReading()">value: {{dataValue}}</h2>
+    <h2 ng-if="shouldShowReading()">other value: {{dataValueList}}</h2>
   </ion-content>
 </ion-view>

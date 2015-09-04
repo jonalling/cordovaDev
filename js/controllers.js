@@ -78,41 +78,81 @@ angular.module('starter.controllers', [])
 
 }) // end GeoCtrl
 
-.controller('bleCtrl', function($scope, $ionicPlatform, $cordovaBLE) {
+.controller('BleCtrl', function($scope, DeviceService) {
 
-  var devices = [];
+  // $scope.devices = DeviceService.list(); // for testing with fake array
 
-  function refreshDevices(){
+  $scope.devices = DeviceService.scanBLE();
 
-    devices.length = 0;
-    // var devices = [];
+  $scope.refreshDevices = function() {
+    DeviceService.scanBLE();
+  }
 
-    $ionicPlatform.ready(function(){
+}) // end BleCtrl
 
-      var scan = $cordovaBLE.scan([],5);
-      scan.then(
-        null,
-        function(err) {
-          // error
-        },
-        function(result) {
-          devices.push(result);
-          ////// TODO: eventually eliminate duplicate items, update array contents instead of clear and push
-          $scope.devices = devices;
-      });
+.controller('BleConnectCtrl', function($scope, $stateParams, $timeout, DeviceService) {
 
-    }); // end $ionicPlatform.ready
+  $scope.device = DeviceService.get($stateParams.deviceId);
 
-  }; // end refreshDevices function
+  $scope.deviceIsConnected = false;
+  $scope.deviceIsSelecting = false;
+  $scope.deviceIsReading = false;
 
-  (function scanDevices() {
-    refreshDevices();
-  })();
+  $scope.connectDevice = function() {
+    DeviceService.connectBLE($stateParams.deviceId);
+    $timeout( function(){
+      // $scope.isConnected();
+      $scope.deviceData = DeviceService.listDeviceData();
+      $scope.deviceIsConnected = true;
+      $scope.deviceIsSelecting = true;
+    }, 4000); // replace with a promise return when connecting is done
+  }
 
-  $scope.refreshDevices = refreshDevices;
+  $scope.shouldShowConnected = function() {
+    return !$scope.deviceIsConnected;
+  }
 
-}) // end bleCtrl
+  $scope.shouldShowSelecting = function() {
+    return $scope.deviceIsSelecting;
+  }
 
-.controller('bleConnectCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+  $scope.shouldShowReading = function() {
+    return $scope.deviceIsReading;
+  }
+
+  $scope.disconnectDevice = function() {
+    DeviceService.disconnectBLE($stateParams.deviceId);
+    $scope.deviceIsConnected = false;
+    $scope.deviceIsSelecting = false;
+    $scope.deviceIsReading = false;
+  }
+
+
+  ////// This works, just not asynchronously
+
+  // $scope.notifyMe = function(data) {
+  //   $scope.dataValue = DeviceService.notifyBLE($stateParams.deviceId, data);
+  //   $scope.deviceIsSelecting = true;
+  //   $scope.deviceIsReading = true;
+  // }
+  //
+  // $scope.dataValueList = DeviceService.listValue();
+
+  ////// Trying to include promises
+
+  $scope.notifyMe = function(data) {
+    $scope.deviceIsSelecting = true;
+    $scope.deviceIsReading = true;
+
+    var getValue = DeviceService.notifyBLE($stateParams.deviceId, data);
+    getValue.then(
+      function(result) {
+        $scope.dataValue = result;
+      },
+      function(error) {
+    });
+  }
+
+
+
 });

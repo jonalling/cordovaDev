@@ -3,12 +3,10 @@
     <button class="button button-full button-stable button-block" ng-click="refreshDevices()">Refresh List</button>
   </ion-header-bar>
   <ion-content>
-    <!-- <button class="button button-stable button-block" ng-click="refreshDevices()">Refresh List</button> -->
     <ion-list>
-        <ion-item ng-repeat="device in devices" type="item-text-wrap" href="#/devices/{{device.name}}">
+        <ion-item ng-repeat="device in devices" type="item-text-wrap" href="#/tab/devices/{{device.id}}">
           <h2>Name: {{device.name}}</h2>
           <p>ID: {{device.id}}</p>
-          <p>RSSI: {{device.rssi}}</p>
         </ion-item>
     </ion-list>
   </ion-content>
