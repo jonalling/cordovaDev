@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'ngCordova', 'nvd3ChartDirectives', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -75,17 +75,17 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       views: {
         'tab-devices': {
           templateUrl: 'templates/tab-devices.html',
-          controller: 'bleCtrl'
+          controller: 'BleCtrl'
         }
       }
-    });
+    })
 
     .state('tab.devices-detail', {
       url: '/devices/:deviceId',
       views: {
         'tab-devices': {
           templateUrl: 'templates/devices-detail.html',
-          controller: 'bleConnectCtrl'
+          controller: 'BleConnectCtrl'
         }
       }
     });

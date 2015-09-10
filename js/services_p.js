@@ -29,8 +29,7 @@ angular.module('starter.services', [])
       connectingId = null,
       isDeviceConnected = null,
       serviceUUID = '',
-      characteristicUUID = '',
-      value = '';
+      characteristicUUID = '';
 
 
 
@@ -158,7 +157,8 @@ angular.module('starter.services', [])
   } // end connect function
 
 
-  ////// CHECK IF THE DEVICE IS CONNECTED
+
+  ////// CHECK IF THE DEVICE IS CONNECTED (not currently used)
 
   // this.isConnectedBLE = function(deviceId) {
   //
@@ -179,7 +179,9 @@ angular.module('starter.services', [])
   //
   // } // end disconnect function
 
-  ////// ARRAY BUFFER
+
+
+  ////// ARRAY BUFFER (not currently used)
 
   this.bytesToString = function(result) {
     return String.fromCharCode.apply(null, new Uint8Array(result));
@@ -199,6 +201,8 @@ angular.module('starter.services', [])
 
   this.notifyBLE = function(deviceId, data) {
 
+    var deferred = $q.defer();
+
     serviceUUID = data.service;
     characteristicUUID = data.characteristic;
 
@@ -207,26 +211,29 @@ angular.module('starter.services', [])
       var notify = $cordovaBLE.startNotification(deviceId, serviceUUID, characteristicUUID);
       notify.then(
         function(result) {
-          value = new Uint8Array(result);
+          ////// trying promises, services_w.js has partially old working code
+          var value = new Uint8Array(result);
+          deferred.resolve(value);
+          // return deferred.promise;
         },
         function(error) {
+
       });
 
     }); // end $ionicPlatform.ready
 
-    return value;
+    return deferred.promise;
+    // return value[0];
 
   } // end notify function
 
 
 
-
   ////// SIMPLY RETURN value
 
-  this.listValue = function() {
-    return value[0];
-  } // end list function
-
+  // this.listValue = function() {
+  //   return value[0];
+  // } // end list function
 
 
 }); // end 'DeviceService'

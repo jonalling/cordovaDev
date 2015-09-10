@@ -2,59 +2,11 @@ angular.module('starter.controllers', [])
 
 .controller('MotionCtrl', function($scope, $ionicPlatform, $cordovaDeviceMotion) {
 
-  var containerWidth = 300,
-      containerHeight = 300,
-      zRange = 15;
-
-  $scope.graph = {'width': containerWidth, 'height': containerHeight};
-
-  // var xVar = (fakeX+9.81)*(containerWidth/(9.81*2));
-  //
-  // $scope.circles = [
-  // 	{'x': xVar, 'y': 178, 'r':10}
-  // ];
-
-  // $scope.exampleData = [
-  //   {
-  //   "key":"Group 0",
-  //   "values":[{"x":5,"y":5,"size":1}]
-  //   }];
-
-
-  // $scope.options = {
-  //    chart: {
-  //        id: 'scatter',
-  //        type: 'scatterChart',
-  //        height: 400,
-  //        forceX: [-9.9,9.9],
-  //        forceY: [-9.9,9.9],
-  //        margin: {"left":12,"right":12,"top":12,"bottom":12},
-  //        showLegend: false,
-  //        showXAxis: false,
-  //        showYAxis: false,
-  //        tooltips: false,
-  //        interactive: false,
-  //        color: [000000],
-  //        pointRange: [250,250], // min area, max area
-  //        duration: 0
-  //    }
-  // };
-  //
-  // $scope.data = [{
-  //   key: "Acceleration",
-  //   values: [{
-  //   x: 0,
-  //   y: 0,
-  //   size: 1,
-  //   shape: 'circle'
-  //   }]
-  // }];
-
   $ionicPlatform.ready(function(){
 
     ////// FROM ngCORDOVA EXAMPLE
 
-    var options = { frequency : 150 };
+    var options = { frequency : 100 };
     var watch = $cordovaDeviceMotion.watchAcceleration(options);
     watch.then(
       null,
@@ -66,35 +18,6 @@ angular.module('starter.controllers', [])
         $scope.Y = result.y;
         $scope.Z = result.z;
         $scope.timeStamp = result.timestamp;
-
-        var negX = result.x * -1;
-        var negY = result.y;
-        var newZ = result.z * -1;
-
-        var xVar = (negX+9.81)*(containerWidth/(9.81*2));
-        var yVar = (negY+9.81)*(containerWidth/(9.81*2));
-        var zVar = ((newZ+9.81)*(zRange/(9.81*2)))+10;
-
-        $scope.circles = [
-        	{'x': xVar, 'y': yVar, 'r':zVar}
-        ];
-
-        // $scope.data = [{
-        //   key: "Acceleration",
-        //   values: [{
-        //     x: negX,
-        //     y: negY,
-        //     size: 1,
-        //     shape: 'circle'
-        //   }]
-        // }];
-
-        // $scope.exampleData = [
-        //   {
-        //   "key":"Group 0",
-        //   "values":[{"x":negX,"y":negY,"size":1}]
-        //   }];
-
     });
 
   }); // end $ionicPlatform.ready
@@ -167,7 +90,7 @@ angular.module('starter.controllers', [])
 
 }) // end BleCtrl
 
-.controller('BleConnectCtrl', function($scope, $stateParams, $timeout, DeviceService) {
+.controller('BleConnectCtrl', function($scope, $stateParams, $timeout, $q, ngCordova.plugins.ble, $ionicPlatform, DeviceService) {
 
   $scope.device = DeviceService.get($stateParams.deviceId);
 
@@ -204,6 +127,9 @@ angular.module('starter.controllers', [])
     $scope.deviceIsReading = false;
   }
 
+
+  ////// This works, just not asynchronously
+
   $scope.notifyMe = function(data) {
     $scope.dataValue = DeviceService.notifyBLE($stateParams.deviceId, data);
     $scope.deviceIsSelecting = true;
@@ -211,4 +137,26 @@ angular.module('starter.controllers', [])
   }
 
   $scope.dataValueList = DeviceService.listValue();
+
+  ////// Trying to include promises
+  // $scope.callbackValue;
+  //
+  // $scope.notifyMe = function(data) {
+  //   $scope.deviceIsSelecting = true;
+  //   $scope.deviceIsReading = true;
+  //
+  //   var getValue = DeviceService.notifyBLE($stateParams.deviceId, data);
+  //   getValue.then(
+  //     function(result) {
+  //         $scope.callbackValue = result;
+  //     },
+  //     function(error) {
+  //   });
+  // }
+  //
+  // $scope.$watch('callbackValue', function() {
+  //   $scope.dataValue = $scope.callbackValue;
+  // });
+
+
 });
