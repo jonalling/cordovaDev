@@ -201,13 +201,21 @@ angular.module('starter.services', [])
 
     serviceUUID = data.service;
     characteristicUUID = data.characteristic;
-
+    
+    var deferred = $q.defer();
+    
     $ionicPlatform.ready(function(){
 
       var notify = $cordovaBLE.startNotification(deviceId, serviceUUID, characteristicUUID);
       notify.then(
         function(result) {
+<<<<<<< HEAD
           value = new Uint8Array(result);
+=======
+          // trying promises
+          var value = new Uint8Array(result);
+          deferred.resolve(value);
+>>>>>>> origin/master
         },
         function(error) {
       });
