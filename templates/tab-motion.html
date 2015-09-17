@@ -1,43 +1,38 @@
-<ion-view view-title="ngCordova Development App">
-  <ion-content class="padding">
-    <div class="list card">
-      <div class="item item-divider">Acceleration</div>
-      <!-- <nvd3-scatter-chart
-            data="exampleData"
-            id="exampleId"
-            height="400"
-            width="355"
-            forceX=[-9.9,9.9]
-            forceY=[-9.9,9.9]
-            showXAxis="true"
-            showYAxis="true"
-            pointRange=[250,250]
-            margin="{left:25, top:25, bottom:25, right:25}"
-            >
-        	<svg></svg>
-      </nvd3-scatter-chart> -->
-      <!-- <nvd3-scatter-chart
-            data="exampleData"
-            width="550"
-            height="400"
-            yAxisTickFormat="yAxisTickFormatFunction()"
-            xAxisTickFormat="xAxisTickFormatFunction()">
-        	<svg></svg>
-      </nvd3-scatter-chart> -->
-      <!-- <nvd3 options="options" data="data"></nvd3> -->
-      <svg ng-attr-height="{{graph.height}}" ng-attr-width="{{graph.width}}">
-      	<circle ng-repeat="circle in circles"
-      		ng-attr-cx="{{circle.x}}"
-      		ng-attr-cy="{{circle.y}}"
-      		ng-attr-r="{{circle.r}}">
-      	</circle>
+<ion-view hide-nav-bar="true" class="motion">
+  <ion-content class="padding" scroll="true">
+    <div id="main" style="width:100%">
+      <svg ng-attr-height="{{svgHeight}}" ng-attr-width="{{width}}">
+        <!-- <circle
+          ng-attr-cx="{{singleCircle.x}}"
+          ng-attr-cy="{{singleCircle.y}}"
+          ng-attr-r="{{singleCircle.r}}"
+          fill="#6DB3B5"
+          fill-opacity="1">
+        </circle> -->
+        <circle ng-repeat="circle in circles"
+          ng-attr-cx="{{circle.x}}"
+          ng-attr-cy="{{circle.y}}"
+          ng-attr-r="{{circle.r}}"
+          fill="#6DB3B5"
+          fill-opacity="{{circle.opacity}}">
+        </circle>
       </svg>
+      <svg ng-attr-height="{{chartHeight}}" ng-attr-width="{{width}}">
+        <path class="line" ng-attr-d="{{line(data)}}"></path>
+      </svg>
+    </div>
+    <!-- <p>width: {{width}}</p>
+    <p>height: {{fullHeight}}</p> -->
+    <!-- <p>data: {{data}}</p> -->
+    <!-- <p>data: {{data1}}</p> -->
+    <!-- <div class="list card">
+      <div class="item item-divider">Acceleration</div>
       <div class="item item-body">
         <div>X: {{X}}</div>
         <div>Y: {{Y}}</div>
         <div>Z: {{Z}}</div>
-        <!-- <div>Time: {{timeStamp}}</div> -->
+        <div>Time: {{timeStamp}}</div>
       </div>
-    </div>
+    </div> -->
   </ion-content>
 </ion-view>

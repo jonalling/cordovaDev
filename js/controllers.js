@@ -1,60 +1,99 @@
 angular.module('starter.controllers', [])
 
-.controller('MotionCtrl', function($scope, $ionicPlatform, $cordovaDeviceMotion) {
+.controller('MotionCtrl', function($window, $scope, $timeout, $ionicPlatform, $cordovaDeviceMotion) {
 
-  var containerWidth = 300,
-      containerHeight = 300,
-      zRange = 15;
+  ////// Dims of overall window
+  // $scope.width = $window.innerWidth;
+  $scope.fullHeight = $window.innerHeight;
 
-  $scope.graph = {'width': containerWidth, 'height': containerHeight};
+  ////// Dims of div (accomodates for ionic padding)
+  $scope.width = angular.element(document.querySelector('#main'))[0].offsetWidth;
+  $scope.height = angular.element(document.querySelector('#main'))[0].offsetHeight;
+  $scope.svgHeight = $scope.width; // change if you want portrait rect instead of square
+  $scope.chartHeight = 200;
 
-  // var xVar = (fakeX+9.81)*(containerWidth/(9.81*2));
-  //
-  // $scope.circles = [
-  // 	{'x': xVar, 'y': 178, 'r':10}
+
+  var zRange = 20, // size range of dot
+      padding = 22; // padding to show whole dot along edge
+
+
+  $scope.data = [];
+
+  ////// Test data for debugging
+  // $scope.data = [
+  //   {'id':202,'x':157,'y':160,'z':10,'s':224},
+  //   {'id':201,'x':156,'y':148,'z':10,'s':216},
+  //   {'id':200,'x':152,'y':152,'z':9,'s':216},
+  //   {'id':199,'x':154,'y':153,'z':10,'s':217},
+  //   {'id':198,'x':160,'y':143,'z':10,'s':215},
+  //   {'id':197,'x':150,'y':165,'z':10,'s':224},
+  //   {'id':196,'x':149,'y':187,'z':10,'s':240},
+  //   {'id':195,'x':159,'y':129,'z':10,'s':205},
+  //   {'id':194,'x':157,'y':134,'z':10,'s':207},
+  //   {'id':193,'x':158,'y':153,'z':10,'s':229},
+  //   {'id':192,'x':90,'y':98,'z':9,'s':205},
+  //   {'id':191,'x':92,'y':90,'z':8,'s':200},
+  //   {'id':190,'x':98,'y':85,'z':8,'s':250},
+  //   {'id':189,'x':102,'y':100,'z':8,'s':220},
+  //   {'id':188,'x':90,'y':105,'z':8,'s':215}
   // ];
 
-  // $scope.exampleData = [
-  //   {
-  //   "key":"Group 0",
-  //   "values":[{"x":5,"y":5,"size":1}]
-  //   }];
+  var dataId = 0;
 
-
-  // $scope.options = {
-  //    chart: {
-  //        id: 'scatter',
-  //        type: 'scatterChart',
-  //        height: 400,
-  //        forceX: [-9.9,9.9],
-  //        forceY: [-9.9,9.9],
-  //        margin: {"left":12,"right":12,"top":12,"bottom":12},
-  //        showLegend: false,
-  //        showXAxis: false,
-  //        showYAxis: false,
-  //        tooltips: false,
-  //        interactive: false,
-  //        color: [000000],
-  //        pointRange: [250,250], // min area, max area
-  //        duration: 0
-  //    }
-  // };
+  ////// Code for browser debugging with responsive dot (no cordova)
+  // var negX = 0;
+  // var negY = 0;
+  // var newZ = 0;
   //
-  // $scope.data = [{
-  //   key: "Acceleration",
-  //   values: [{
-  //   x: 0,
-  //   y: 0,
-  //   size: 1,
-  //   shape: 'circle'
-  //   }]
-  // }];
+  // $interval( function(){
+  //
+  //   negX = negX + 1;
+  //   negY = negY + 1;
+  //   newZ = newZ + 1;
+  //   var xVar = ((negX+9.81)*(($scope.width-(padding*2))/(9.81*2)))+padding;
+  //   var yVar = ((negY+9.81)*(($scope.svgHeight-(padding*2))/(9.81*2)))+padding;
+  //   var zVar = ((newZ+9.81)*(zRange/(9.81*2)))+10;
+  //
+  //   if (data.length > 10) {
+  //     data.shift({id: dataId, x: xVar,	y: yVar, z: zVar});
+  //     dataId++;
+  //   } else {
+  //     data.unshift({id: dataId, x: xVar,	y: yVar, z: zVar});
+  //     dataId++;
+  //   }
+  //
+  //   console.log(data);
+  //
+  //   $scope.circle = {'x': data[0].x, 'y': data[0].y, 'r': data[0].z};
+  //
+  // }, 40, 20);
 
+  // $scope.circle = {'x': xVar, 'y': yVar, 'r':zVar};
+
+  // $scope.circles = [];
+  //
+  // for (i = 0; i < 9; i++) {
+  //   opacityPercent = 1 - (i/10);
+  //   $scope.circles.unshift({'opacity': opacityPercent, 'x': $scope.data[i].x, 'y': $scope.data[i].y, 'r': $scope.data[i].z});
+  // }
+  //
+  // x = d3.time.scale().range([0, $scope.width]);
+  // y = d3.scale.linear().range([$scope.chartHeight, 0]);
+  //
+  // x.domain(d3.extent($scope.data, function(d) {return d.id}));
+  // // y.domain(d3.extent($scope.data, function(d) {return d.s}));
+  // y.domain([100,400]);
+  //
+  // $scope.line = d3.svg.line()
+  //     .x(function(d) {return x(d.id);})
+  //     .y(function(d) {return y(d.s);});
+
+
+
+  //// Start Cordova code, returning dot position relative to accerlation (responsive size)
   $ionicPlatform.ready(function(){
 
-    ////// FROM ngCORDOVA EXAMPLE
-
-    var options = { frequency : 150 };
+    var options = { frequency : 40 }; //plugin min 40ms, max 1000ms
     var watch = $cordovaDeviceMotion.watchAcceleration(options);
     watch.then(
       null,
@@ -67,33 +106,56 @@ angular.module('starter.controllers', [])
         $scope.Z = result.z;
         $scope.timeStamp = result.timestamp;
 
-        var negX = result.x * -1;
-        var negY = result.y;
-        var newZ = result.z * -1;
+        // Scale Dot Position
+        var xVar = (((result.x * -1)+9.81)*(($scope.width-(padding*2))/(9.81*2)))+padding;
+        var yVar = (((result.y)+9.81)*(($scope.svgHeight-(padding*2))/(9.81*2)))+padding;
+        var zVar = (((result.z * -1)+9.81)*(zRange/(9.81*2)))+10;
+        var mag = Math.sqrt($scope.X*$scope.X + $scope.Y*$scope.Y + $scope.Z*$scope.Z);
 
-        var xVar = (negX+9.81)*(containerWidth/(9.81*2));
-        var yVar = (negY+9.81)*(containerWidth/(9.81*2));
-        var zVar = ((newZ+9.81)*(zRange/(9.81*2)))+10;
+        // Draw Dot
+        // $scope.circle = {'x': xVar, 'y': yVar, 'r':zVar};
 
-        $scope.circles = [
-        	{'x': xVar, 'y': yVar, 'r':zVar}
-        ];
+        // Draw Trailing Dots
+        if ($scope.data.length > 30) {
+          $scope.data.pop();
+          $scope.data.unshift({id: dataId, x: xVar,	y: yVar, z: zVar, s: mag});
+          dataId++;
+        } else {
+          $scope.data.unshift({id: dataId, x: xVar,	y: yVar, z: zVar, s: mag});
+          dataId++;
+        }
 
-        // $scope.data = [{
-        //   key: "Acceleration",
-        //   values: [{
-        //     x: negX,
-        //     y: negY,
-        //     size: 1,
-        //     shape: 'circle'
-        //   }]
-        // }];
+        // $scope.singleCircle = {'x': data[0].x, 'y': data[0].y, 'r': data[0].z};
 
-        // $scope.exampleData = [
-        //   {
-        //   "key":"Group 0",
-        //   "values":[{"x":negX,"y":negY,"size":1}]
-        //   }];
+        $scope.circles = [];
+
+        for (i = 0; i < 9; i++) {
+          opacityPercent = 1 - (i/10);
+          $scope.circles.unshift({'opacity': opacityPercent, 'x': $scope.data[i].x, 'y': $scope.data[i].y, 'r': $scope.data[i].z});
+        }
+
+        x = d3.time.scale().range([0, $scope.width]);
+        y = d3.scale.linear().range([$scope.chartHeight, 0]);
+
+        x.domain(d3.extent($scope.data, function(d) {return d.id}));
+        // y.domain(d3.extent($scope.data, function(d) {return d.s}));
+        y.domain([0,25]);
+
+        $scope.line = d3.svg.line()
+            .x(function(d) {return x(d.id);})
+            .y(function(d) {return y(d.s);});
+
+        ////// For calculating averages later
+        // var calculateAverage = function(MyData){
+        //   var sum = 0;
+        //   for(var i = 0; i < MyData.length; i++;) {
+        //     sum += parseInt(MyData[i], 10); //don't forget to add the base
+        //   }
+        //   var avg = sum/MyData.length;
+        //   return avg;
+        // };
+        //
+        // $scope.calculateAverage(MyData);
 
     });
 
@@ -109,7 +171,7 @@ angular.module('starter.controllers', [])
 
     var options = {
       frequency: null,
-      filter: 1     // if frequency is set, filter is ignored
+      filter: 2     // if frequency is set, filter is ignored
     }
 
     var watch = $cordovaDeviceOrientation.watchHeading(options).then(
