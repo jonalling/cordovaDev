@@ -3,7 +3,7 @@ An Ionic development app based on the tabs starter that interfaces with several 
 
 - [Device Motion](http://ngcordova.com/docs/plugins/deviceMotion/)
 
-![alt tag](https://github.com/jonalling/cordovaDev/blob/master/File%20Sep%2017%2C%203%2024%2051%20PM.png)
+![alt tag](https://github.com/jonalling/cordovaDev/blob/051bafbead754cedc3acddf7582b3e2c66c9cd30/File%20Sep%2017%2C%203%2024%2051%20PM.png)
 
 - [Device Orientation](http://ngcordova.com/docs/plugins/deviceOrientation/)
 - [Geolocation](http://ngcordova.com/docs/plugins/geolocation/)
