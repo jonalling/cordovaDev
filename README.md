@@ -2,6 +2,8 @@
 An Ionic development app based on the tabs starter that interfaces with several ngCordova plugins.  
 
 - [Device Motion](http://ngcordova.com/docs/plugins/deviceMotion/)
+   
+
 - [Device Orientation](http://ngcordova.com/docs/plugins/deviceOrientation/)
 - [Geolocation](http://ngcordova.com/docs/plugins/geolocation/)
 - [BLE (undocumented)](https://github.com/driftyco/ng-cordova/blob/master/src/plugins/ble.js) //still in development
